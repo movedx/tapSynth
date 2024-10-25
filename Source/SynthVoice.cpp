@@ -32,6 +32,27 @@ void SynthVoice::controllerMoved(int controllerNumber, int newControllerValue)
 {
 }
 
+void SynthVoice::prepareToPlay(double sampleRate, int samplesPerBlock, int outputChannels)
+{
+    juce::dsp::ProcessSpec spec;
+    spec.maximumBlockSize = samplesPerBlock;
+    spec.sampleRate = sampleRate;
+    spec.numChannels = outputChannels;
+
+    osc.prepare(spec);
+    gain.prepare(spec);
+
+    osc.setFrequency(220.0f);
+
+    gain.setGainLinear(0.1f);
+
+    isPrepared = true;
+}
+
 void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int startSample, int numSamples)
 {
+    jassert(isPrepared);
+    juce::dsp::AudioBlock<float> audioBlock{ outputBuffer };
+    osc.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
+    gain.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
 }
