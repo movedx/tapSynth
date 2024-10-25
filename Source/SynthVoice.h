@@ -25,6 +25,9 @@ public:
 	void renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int startSample, int numSamples) override;
 
 private:
+	juce::ADSR adsr;
+	juce::ADSR::Parameters adsrParams;
+
 	// return std::sin(x); // sine wave
 	// return x / juce::MathConstants<float>::pi; // saw wave
 	// return x < 0.0f ? -1.0f : 1.0f; // square wave
