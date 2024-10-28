@@ -27,6 +27,7 @@ public:
 private:
 	juce::ADSR adsr;
 	juce::ADSR::Parameters adsrParams;
+	juce::AudioBuffer<float> synthBuffer;
 
 	// return std::sin(x); // sine wave
 	// return x / juce::MathConstants<float>::pi; // saw wave

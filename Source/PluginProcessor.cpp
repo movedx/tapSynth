@@ -166,6 +166,14 @@ void TapSynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
 	    }
     }
 
+    for (const juce::MidiMessageMetadata metadata : midiMessages)
+    {
+        if (metadata.numBytes == 3)
+        {
+            DBG(metadata.getMessage().getDescription());
+        }
+    }
+
     synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 }
 
@@ -205,7 +213,7 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 juce::AudioProcessorValueTreeState::ParameterLayout TapSynthAudioProcessor::createParams()
 {
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
-
+    
     // OSC select
     params.push_back(std::make_unique<juce::AudioParameterChoice>("OSC", "Oscillator", juce::StringArray{ "Sine", "Saw", "Square" }, 0));
 
