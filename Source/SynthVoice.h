@@ -12,6 +12,7 @@
 
 #include <JuceHeader.h>
 #include "SynthSound.h"
+#include "Data/AdsrData.h"
 
 class SynthVoice : public juce::SynthesiserVoice
 {
@@ -22,14 +23,12 @@ public:
 	void pitchWheelMoved(int newPitchWheelValue) override;
 	void controllerMoved(int controllerNumber, int newControllerValue) override;
 	void prepareToPlay(double sampleRate, int samplesPerBlock, int outputChannels);
-	void updateADSR(const float attack, const float decay, const float sustain, const float release);
+	void SynthVoice::update(const float attack, const float decay, const float sustain, const float release);
 	void renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int startSample, int numSamples) override;
 
 private:
-	juce::ADSR adsr;
-	juce::ADSR::Parameters adsrParams;
 	juce::AudioBuffer<float> synthBuffer;
-
+	AdsrData adsr;
 	// return std::sin(x); // sine wave
 	// return x / juce::MathConstants<float>::pi; // saw wave
 	// return x < 0.0f ? -1.0f : 1.0f; // square wave
