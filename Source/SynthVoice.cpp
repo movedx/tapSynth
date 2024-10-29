@@ -54,14 +54,19 @@ void SynthVoice::prepareToPlay(double sampleRate, int samplesPerBlock, int outpu
 
 	gain.setGainLinear(0.1f);
 
-	adsrParams.attack = 0.01f;
-	adsrParams.decay = 0.5f;
-	adsrParams.sustain = 1.0f;
-	adsrParams.release = 0.5f;
 
-	adsr.setParameters(adsrParams);
 
 	isPrepared = true;
+}
+
+void SynthVoice::updateADSR(const float attack, const float decay, const float sustain, const float release)
+{
+	adsrParams.attack = attack;
+	adsrParams.decay = decay;
+	adsrParams.sustain = sustain;
+	adsrParams.release = release;
+
+	adsr.setParameters(adsrParams);
 }
 
 void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int startSample, int numSamples)
@@ -113,7 +118,6 @@ void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
 	osc.process(context);
 	gain.process(context);
 
-	adsr.setParameters(adsrParams);
 	adsr.applyEnvelopeToBuffer(outputBuffer, startSample, numSamples);
 
 	if (!adsr.isActive())
