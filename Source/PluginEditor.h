@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "UI/AdsrComponent.h"
+#include "UI/OscComponent.h"
 
 //==============================================================================
 /**
@@ -25,17 +26,13 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
 
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> oscSelectAttachment;
-
-
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     TapSynthAudioProcessor& audioProcessor;
 
     AdsrComponent adsr;
-    
-    juce::ComboBox oscSelector;
+    OscComponent osc;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TapSynthAudioProcessorEditor)
 };
