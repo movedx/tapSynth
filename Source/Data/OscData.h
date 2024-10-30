@@ -27,5 +27,5 @@ public:
     void getNextAudioBlock(juce::dsp::ProcessContextReplacing<float>& context);
 
 private:
-    juce::dsp::Oscillator<float> osc{ [](float x) { return x / juce::MathConstants<float>::pi; } };
+
 };
