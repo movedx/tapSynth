@@ -12,7 +12,7 @@
 #include "OscComponent.h"
 
 //==============================================================================
-OscComponent::OscComponent(juce::AudioProcessorValueTreeState& apvts, juce::String waveSelectorId)
+OscComponent::OscComponent(juce::AudioProcessorValueTreeState& apvts, juce::String waveSelectorId, juce::String fmFreqId, juce::String fmDepthId)
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
@@ -21,6 +21,9 @@ OscComponent::OscComponent(juce::AudioProcessorValueTreeState& apvts, juce::Stri
     addAndMakeVisible(oscWaveSelector);
 
     oscWaveSelectorAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(apvts, waveSelectorId, oscWaveSelector);
+
+    setSliderWithLabel(fmFreqSlider, fmFreqLabel, fmFreqAttachment, apvts, fmFreqId);
+    setSliderWithLabel(fmDepthSlider, fmDepthLabel, fmDepthAttachment, apvts, fmDepthId);
 }
 
 OscComponent::~OscComponent()
@@ -37,9 +40,41 @@ void OscComponent::paint (juce::Graphics& g)
     */
 
     g.fillAll(juce::Colours::black);
+    g.setColour(juce::Colours::white);
+    g.drawRect(getLocalBounds());
 }
 
 void OscComponent::resized()
 {
+    const auto sliderPosY = 80;
+    const auto sliderWidth = 100;
+    const auto sliderHeight = 90;
+    const auto labelYOffset = 20;
+    const auto labelHeight = 20;
+
     oscWaveSelector.setBounds(0, 0, 90, 20);
+    fmFreqSlider.setBounds(0, sliderPosY, sliderWidth, sliderHeight);
+    fmFreqLabel.setBounds(fmFreqSlider.getX(), fmFreqSlider.getY() - labelYOffset, fmFreqSlider.getWidth(), labelHeight);
+
+    fmDepthSlider.setBounds(fmFreqSlider.getRight(), sliderPosY, sliderWidth, sliderHeight);
+    fmDepthLabel.setBounds(fmDepthSlider.getX(), fmDepthSlider.getY() - labelYOffset, fmDepthSlider.getWidth(), labelHeight);
+
+}
+
+void OscComponent::setSliderWithLabel(juce::Slider& slider,
+                                      juce::Label& label,
+                                      std::unique_ptr<SliderAttachment>& attachment,
+                                      juce::AudioProcessorValueTreeState& apvts,
+                                      juce::String paramId)
+{
+    slider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    slider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 50, 25);
+    addAndMakeVisible(slider);
+
+    attachment = std::make_unique<SliderAttachment>(apvts, paramId, slider);
+
+    label.setColour(juce::Label::ColourIds::textColourId, juce::Colours::white);
+    label.setFont(15.0f);
+    label.setJustificationType(juce::Justification::centred);
+    addAndMakeVisible(label);
 }

@@ -170,8 +170,8 @@ void TapSynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
             auto& release = *apvts.getRawParameterValue("RELEASE");
 
             auto& oscWaveChoice = *apvts.getRawParameterValue("OSC1WAVETYPE");
-            auto& fmDepth = *apvts.getRawParameterValue("FMDEPTH");
-            auto& fmFreq = *apvts.getRawParameterValue("FMFREQ");
+            auto& fmDepth = *apvts.getRawParameterValue("OSC1FMDEPTH");
+            auto& fmFreq = *apvts.getRawParameterValue("OSC1FMFREQ");
 
 
             voice->getOscillator().setWaveType(oscWaveChoice);
@@ -233,8 +233,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout TapSynthAudioProcessor::crea
     params.push_back(std::make_unique<juce::AudioParameterChoice>("OSC1WAVETYPE", "Osc 1 Wave Type", juce::StringArray{ "Sine", "Saw", "Square" }, 0));
 
     // FM
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("FMFREQ", "FM Frequency", juce::NormalisableRange<float> { 0.0f, 1000.0f, }, 5.0f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("FMDEPTH", "FM Depth", juce::NormalisableRange<float> { 0.0f, 1000.0f, }, 500.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("OSC1FMFREQ", "FM Frequency", juce::NormalisableRange<float> { 0.0f, 1000.0f, 0.01f, 0.3f}, 0.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("OSC1FMDEPTH", "FM Depth", juce::NormalisableRange<float> { 0.0f, 1000.0f, 0.01f, 0.3f}, 0.0f));
 
 
 
