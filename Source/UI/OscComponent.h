@@ -33,16 +33,16 @@ private:
                                           juce::AudioProcessorValueTreeState& apvts,
                                           juce::String paramId);
 
-    juce::ComboBox oscWaveSelector;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> oscWaveSelectorAttachment;
-
     juce::Slider fmFreqSlider;
     juce::Slider fmDepthSlider;
+
+    juce::ComboBox oscWaveSelector;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> oscWaveSelectorAttachment;
 
     std::unique_ptr<SliderAttachment> fmFreqAttachment;
     std::unique_ptr<SliderAttachment> fmDepthAttachment;
 
-
+    juce::Label waveSelectorLabel{ "Wave Type", "Wave Type" };
     juce::Label fmFreqLabel{"FM Freq", "FM Freq"};
     juce::Label fmDepthLabel{ "FM Depth", "FM Depth" };
 
