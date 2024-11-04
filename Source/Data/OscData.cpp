@@ -41,21 +41,27 @@ void OscData::setWaveFrequency(const int midiNoteNumber)
 }
 
 
-void OscData::getNextAudioBlock(juce::dsp::ProcessContextReplacing<float>& context)
+void OscData::getNextAudioBlock(juce::dsp::AudioBlock<float>& block)
 {
-    for (int ch = 0; ch < context.getOutputBlock().getNumChannels(); ++ch)
+    processFmOsc(block);
+    process(juce::dsp::ProcessContextReplacing<float>(block));
+}
+
+void OscData::processFmOsc(juce::dsp::AudioBlock<float>& block)
+{
+    for (int ch = 0; ch < block.getNumChannels(); ++ch)
     {
-        for (int s = 0; s < context.getOutputBlock().getNumSamples(); ++s)
+        for (int s = 0; s < block.getNumSamples(); ++s)
         {
-            fmMod = fmOsc.processSample(context.getOutputBlock().getSample(ch, s)) * fmDepth;
+            fmMod = fmOsc.processSample(block.getSample(ch, s)) * fmDepth;
         }
     }
-    process(juce::dsp::ProcessContextReplacing<float>(context.getOutputBlock()));
 }
 
 void OscData::setFmParams(const float depth, const float freq)
 {
     fmOsc.setFrequency(freq);
     fmDepth = depth;
-    setFrequency(juce::MidiMessage::getMidiNoteInHertz(lastMidiNote) + fmMod);
+    auto currentFreq = juce::MidiMessage::getMidiNoteInHertz(lastMidiNote) + fmMod;
+    setFrequency(currentFreq >= 0 ? currentFreq : currentFreq * -1.0f, true);
 }

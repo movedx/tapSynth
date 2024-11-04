@@ -61,7 +61,6 @@ public:
 private:
     juce::Synthesiser synth;
 
-
     juce::AudioProcessorValueTreeState::ParameterLayout TapSynthAudioProcessor::createParams();
 
     //==============================================================================

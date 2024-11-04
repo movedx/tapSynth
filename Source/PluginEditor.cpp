@@ -11,11 +11,18 @@
 
 //==============================================================================
 TapSynthAudioProcessorEditor::TapSynthAudioProcessorEditor (TapSynthAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p), adsr (audioProcessor.apvts), osc (audioProcessor.apvts, "OSC1WAVETYPE")
+    : AudioProcessorEditor (&p), 
+    audioProcessor (p),
+    osc(audioProcessor.apvts, "OSC1WAVETYPE", "OSC1FMFREQ", "OSC1FMDEPTH"),
+    adsr ("Amp Envelop", audioProcessor.apvts, "ATTACK", "DECAY", "SUSTAIN", "RELEASE"),
+    filter (audioProcessor.apvts, "FILTERTYPE", "FILTERCUTOFF", "FILTERRES"),
+    modAdsr("Mod Envelop", audioProcessor.apvts, "MODATTACK", "MODDECAY", "MODSUSTAIN", "MODRELEASE")
 {
-    setSize (400, 300);
+    setSize(620, 500);
     addAndMakeVisible(osc);
     addAndMakeVisible(adsr);
+    addAndMakeVisible(filter);
+    addAndMakeVisible(modAdsr);
 }
 
 TapSynthAudioProcessorEditor::~TapSynthAudioProcessorEditor()
@@ -31,9 +38,14 @@ void TapSynthAudioProcessorEditor::paint (juce::Graphics& g)
 
 void TapSynthAudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
+    const auto paddingX = 5;
+    const auto paddingY = 35;
+    const auto paddingY2 = 235;
+    const auto width = 300;
+    const auto height = 200;
 
-    osc.setBounds(10, 10, 100, 30);
-    adsr.setBounds(getWidth() / 2, 0, getWidth() / 2, getHeight());
+    osc.setBounds(paddingX, paddingY, width, height);
+    adsr.setBounds(osc.getRight(), paddingY, width, height);
+    filter.setBounds(paddingX, paddingY2, width, height);
+    modAdsr.setBounds(filter.getRight(), paddingY2, width, height);
 }
